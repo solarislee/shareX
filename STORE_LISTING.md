@@ -72,7 +72,7 @@ host_permissions (x.com, twitter.com, *.twimg.com) — 在帖子页面注入「�
 
 ## 隐私政策 URL / Privacy policy URL
 ```
-（把 PRIVACY.md 托管后填这里，例如 GitHub Pages / Gist 的公开链接）
+https://solarislee.github.io/shareX/privacy.html
 ```
 
 ---
@@ -80,4 +80,4 @@ host_permissions (x.com, twitter.com, *.twimg.com) — 在帖子页面注入「�
 ## 还需要手动准备的素材
 - [ ] 至少 1 张截图：**1280×800** 或 **640×400**（建议放「点按钮 → 预览弹窗」的实拍图）
 - [ ]（可选）小宣传图 440×280
-- [ ] 一个可公开访问的隐私政策 URL（托管 PRIVACY.md）
+- [x] 一个可公开访问的隐私政策 URL：https://solarislee.github.io/shareX/privacy.html
