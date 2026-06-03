@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>推文转图卡 / Post to Image Card</title>
+<style>
+  :root { color-scheme: light; }
+  body {
+    margin: 0; padding: 60px 20px;
+    font: 16px/1.7 -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    color: #1e293b; background: linear-gradient(160deg, #eef2ff, #e7f0fb); min-height: 100vh;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; background: #fff; border-radius: 24px;
+    padding: 48px 44px; box-shadow: 0 20px 50px rgba(15,23,42,.12); text-align: center; }
+  .logo { font-size: 56px; }
+  h1 { font-size: 28px; margin: 12px 0 6px; }
+  .tag { color: #64748b; margin: 0 0 28px; }
+  ul { text-align: left; display: inline-block; padding-left: 22px; color: #334155; }
+  .links { margin-top: 32px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  a.btn { text-decoration: none; padding: 10px 18px; border-radius: 12px; font-weight: 600; }
+  a.primary { background: #1d9bf0; color: #fff; }
+  a.ghost { background: #f1f5f9; color: #0f172a; }
+  .foot { margin-top: 28px; color: #94a3b8; font-size: 13px; font-style: italic; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">📸</div>
+  <h1>推文转图卡 · Post to Image Card</h1>
+  <p class="tag">把一条帖子的文字和图片，一键转成精美图片卡片，方便分享给家人朋友。</p>
+  <ul>
+    <li>在帖子操作栏一键生成图片卡片</li>
+    <li>保留正文、emoji、作者头像/昵称、配图与日期</li>
+    <li>支持长文（Article）标题 + 正文</li>
+    <li>2× 高分辨率，下载 PNG 或复制到剪贴板</li>
+    <li>纯本地运行，不收集任何数据</li>
+  </ul>
+  <div class="links">
+    <a class="btn primary" href="https://github.com/solarislee/shareX">GitHub 源码</a>
+    <a class="btn ghost" href="./privacy.html">隐私政策 / Privacy</a>
+  </div>
+  <p class="foot">Independent third-party tool. Not affiliated with X Corp.</p>
+</div>
+</body>
+</html>

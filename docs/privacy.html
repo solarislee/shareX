@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>隐私政策 · 推文转图卡 / Post to Image Card</title>
+<style>
+  :root { color-scheme: light; }
+  body {
+    margin: 0; padding: 40px 20px;
+    font: 16px/1.7 -apple-system, "PingFang SC", "Microsoft YaHei", "Segoe UI", Roboto, sans-serif;
+    color: #1e293b; background: linear-gradient(160deg, #eef2ff, #e7f0fb); min-height: 100vh;
+  }
+  .wrap { max-width: 720px; margin: 0 auto; background: #fff; border-radius: 20px;
+    padding: 40px 44px; box-shadow: 0 20px 50px rgba(15,23,42,.12); }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  h2 { font-size: 20px; margin: 36px 0 10px; padding-top: 18px; border-top: 1px solid #eef2f6; }
+  h3 { font-size: 16px; margin: 20px 0 6px; color: #0f172a; }
+  .meta { color: #64748b; font-size: 14px; margin-bottom: 8px; }
+  code { background: #f1f5f9; padding: 2px 6px; border-radius: 6px; font-size: 14px; }
+  a { color: #1d9bf0; }
+  .foot { margin-top: 32px; color: #94a3b8; font-size: 13px; font-style: italic; }
+  ul { padding-left: 22px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>隐私政策 / Privacy Policy</h1>
+  <p class="meta"><strong>扩展 / Extension:</strong> 推文转图卡（Post to Image Card）<br>
+  <strong>最后更新 / Last updated:</strong> 2026-06-02</p>
+
+  <h2>中文</h2>
+  <p>「推文转图卡」尊重并保护用户隐私。本扩展的全部功能均在你的浏览器本地完成。</p>
+  <h3>我们收集哪些数据</h3>
+  <p><strong>不收集任何数据。</strong> 本扩展不收集、不存储、不上传、不分享任何个人信息或浏览数据。</p>
+  <h3>数据如何被处理</h3>
+  <ul>
+    <li>当你点击页面上的「📸」按钮时，扩展仅读取<strong>当前这条帖子</strong>的公开内容（文字、作者昵称/头像、配图）用于在本地生成一张图片。</li>
+    <li>生成图片所需的配图通过扩展后台从图片服务器（twimg.com）抓取，仅用于绘制到本地画布，不会发送到任何其它服务器。</li>
+    <li>生成的图片只保存在你本地（下载到设备或复制到剪贴板），不经过任何外部服务器。</li>
+  </ul>
+  <h3>权限说明</h3>
+  <ul>
+    <li><code>clipboardWrite</code>：用于「复制到剪贴板」功能，把生成的图片写入剪贴板。</li>
+    <li><code>host_permissions</code>（x.com / twitter.com / twimg.com）：用于在这些页面注入按钮、读取当前帖子内容、抓取配图。仅作用于这些域名。</li>
+  </ul>
+  <h3>第三方</h3>
+  <p>本扩展不使用任何第三方分析、广告或追踪服务，不包含远程加载的代码。</p>
+  <h3>联系方式</h3>
+  <p>如有疑问请联系：<a href="mailto:yxz077831@gmail.com">yxz077831@gmail.com</a></p>
+
+  <h2>English</h2>
+  <p>"Post to Image Card" respects your privacy. All functionality runs locally in your browser.</p>
+  <h3>Data we collect</h3>
+  <p><strong>None.</strong> This extension does not collect, store, transmit, or share any personal or browsing data.</p>
+  <h3>How data is handled</h3>
+  <ul>
+    <li>When you click the "📸" button, the extension reads only the public content of <strong>that single post</strong> (text, author name/avatar, images) to generate an image locally.</li>
+    <li>Post images are fetched by the extension's background worker from the image server (twimg.com) solely to draw them onto a local canvas; nothing is sent to any other server.</li>
+    <li>The generated image stays on your device (downloaded or copied to clipboard) and never passes through any external server.</li>
+  </ul>
+  <h3>Permissions</h3>
+  <ul>
+    <li><code>clipboardWrite</code>: to copy the generated image to your clipboard.</li>
+    <li><code>host_permissions</code> (x.com / twitter.com / twimg.com): to inject the button, read the current post, and fetch its images. Limited to these domains.</li>
+  </ul>
+  <h3>Third parties</h3>
+  <p>No third-party analytics, ads, or tracking. No remotely hosted code.</p>
+  <h3>Contact</h3>
+  <p><a href="mailto:yxz077831@gmail.com">yxz077831@gmail.com</a></p>
+
+  <p class="foot">This extension is an independent third-party tool and is not affiliated with, endorsed by, or sponsored by X Corp.</p>
+</div>
+</body>
+</html>
