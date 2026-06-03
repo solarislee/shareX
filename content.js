@@ -79,7 +79,84 @@
     return s.replace(/\n{3,}/g, "\n\n").trim();
   }
 
-  function extract(article) {
+  function unique(list) {
+    return [...new Set(list.filter(Boolean))];
+  }
+
+  function extractMediaImages(article) {
+    const urls = [
+      ...article.querySelectorAll('[data-testid="tweetPhoto"] img'),
+    ].map((i) => i.src);
+
+    article
+      .querySelectorAll(
+        'img[src*="pbs.twimg.com/media"], img[src*="pbs.twimg.com/ext_tw_video_thumb"]'
+      )
+      .forEach((img) => {
+        const src = img.src || "";
+        if (!src) return;
+        if (src.includes("profile_images")) return;
+        urls.push(src);
+      });
+
+    return unique(urls);
+  }
+
+  function captureVideoFrame(video) {
+    return new Promise((resolve) => {
+      const done = () => {
+        try {
+          if (!video.videoWidth || !video.videoHeight) return resolve(null);
+          const canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL("image/png"));
+        } catch (_) {
+          resolve(null);
+        }
+      };
+
+      if (video.readyState >= 2) {
+        done();
+        return;
+      }
+
+      const cleanup = () => {
+        video.removeEventListener("loadeddata", onReady);
+        video.removeEventListener("canplay", onReady);
+        video.removeEventListener("error", onError);
+      };
+      const onReady = () => {
+        cleanup();
+        done();
+      };
+      const onError = () => {
+        cleanup();
+        resolve(null);
+      };
+
+      video.addEventListener("loadeddata", onReady, { once: true });
+      video.addEventListener("canplay", onReady, { once: true });
+      video.addEventListener("error", onError, { once: true });
+      setTimeout(() => {
+        cleanup();
+        done();
+      }, 700);
+    });
+  }
+
+  async function extractVideoFrames(article) {
+    const frames = [];
+    for (const video of article.querySelectorAll("video")) {
+      const frame = await captureVideoFrame(video);
+      if (frame) frames.push(frame);
+    }
+    return unique(frames);
+  }
+
+  async function extract(article) {
     let name = "";
     let handle = "";
     const nameEl = article.querySelector('[data-testid="User-Name"]');
@@ -114,10 +191,9 @@
     );
     const avatar = avatarImg ? avatarImg.src : "";
 
-    // 配图：普通推文用 tweetPhoto；article 用正文里的媒体图（排除 emoji）
-    let images = [
-      ...article.querySelectorAll('[data-testid="tweetPhoto"] img'),
-    ].map((i) => i.src);
+    // 配图：普通推文用 tweetPhoto；视频推文补充 video 当前帧或封面图；
+    // article 用正文里的媒体图（排除 emoji）
+    let images = extractMediaImages(article);
     if (!images.length) {
       const bodyEl = article.querySelector(
         '[data-testid="twitterArticleRichTextView"], [data-testid="longformRichTextComponent"]'
@@ -128,6 +204,11 @@
           .filter((s) => s.includes("pbs.twimg.com/media"));
       }
     }
+    const videoFrames = await extractVideoFrames(article);
+    if (videoFrames.length) {
+      images = images.filter((u) => !u.includes("ext_tw_video_thumb"));
+    }
+    images = unique([...videoFrames, ...images]);
 
     const timeEl = article.querySelector("time");
     const datetime = timeEl ? timeEl.getAttribute("datetime") : "";
@@ -175,6 +256,7 @@
 
   async function tryLoad(url) {
     try {
+      if (url && url.startsWith("data:")) return await loadImage(url);
       return await loadImage(await fetchImageDataUrl(hq(url)));
     } catch (_) {
       try {
@@ -278,56 +360,32 @@
     return `${d.getFullYear()}年${d.getMonth() + 1}月${d.getDate()}日`;
   }
 
-  // 计算多图布局，返回 {rects:[{x,y,w,h,img}], height}
+  // 计算媒体布局，按源图/视频帧自身宽高比显示，避免拉伸变形。
   function layoutImages(imgs, x, y, maxW) {
     const gap = 8;
     const rects = [];
     if (imgs.length === 0) return { rects, height: 0 };
 
-    if (imgs.length === 1) {
-      const im = imgs[0];
-      const ratio = im.naturalHeight / im.naturalWidth;
-      const w = maxW;
-      const h = Math.min(maxW * ratio, 460);
-      rects.push({ x, y, w, h, img: im });
-      return { rects, height: h };
-    }
-
-    const cols = 2;
-    const cellW = (maxW - gap) / cols;
-    const cellH = cellW * 0.66; // 多图统一裁切成 3:2
-    const rows = Math.ceil(imgs.length / cols);
+    let cy = y;
     imgs.forEach((im, i) => {
-      const c = i % cols;
-      const r = Math.floor(i / cols);
+      const ratio = im.naturalHeight / im.naturalWidth || 1;
+      let w = maxW;
+      let h = w * ratio;
+      const maxH = 560;
+      if (h > maxH) {
+        h = maxH;
+        w = h / ratio;
+      }
       rects.push({
-        x: x + c * (cellW + gap),
-        y: y + r * (cellH + gap),
-        w: cellW,
-        h: cellH,
+        x: x + (maxW - w) / 2,
+        y: cy,
+        w,
+        h,
         img: im,
-        crop: true,
       });
+      cy += h + (i === imgs.length - 1 ? 0 : gap);
     });
-    return { rects, height: rows * cellH + (rows - 1) * gap };
-  }
-
-  function drawImageCropped(ctx, im, x, y, w, h) {
-    const sr = im.naturalWidth / im.naturalHeight;
-    const dr = w / h;
-    let sx, sy, sw, sh;
-    if (sr > dr) {
-      sh = im.naturalHeight;
-      sw = sh * dr;
-      sx = (im.naturalWidth - sw) / 2;
-      sy = 0;
-    } else {
-      sw = im.naturalWidth;
-      sh = sw / dr;
-      sx = 0;
-      sy = (im.naturalHeight - sh) / 2;
-    }
-    ctx.drawImage(im, sx, sy, sw, sh, x, y, w, h);
+    return { rects, height: cy - y };
   }
 
   async function renderCard(data) {
@@ -474,8 +532,7 @@
         ctx.save();
         roundRect(ctx, rc.x, rc.y, rc.w, rc.h, 14);
         ctx.clip();
-        if (rc.crop) drawImageCropped(ctx, rc.img, rc.x, rc.y, rc.w, rc.h);
-        else ctx.drawImage(rc.img, rc.x, rc.y, rc.w, rc.h);
+        ctx.drawImage(rc.img, rc.x, rc.y, rc.w, rc.h);
         ctx.restore();
         ctx.save();
         roundRect(ctx, rc.x, rc.y, rc.w, rc.h, 14);
@@ -593,7 +650,7 @@
     btn.textContent = "⏳";
     btn.style.pointerEvents = "none";
     try {
-      const data = extract(article);
+      const data = await extract(article);
       const canvas = await renderCard(data);
       showModal(canvas);
     } catch (e) {
