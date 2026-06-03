@@ -1,0 +1,86 @@
+/* 注入到推文操作栏的按钮 */
+.x2img-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  margin-left: 4px;
+  font-size: 16px;
+  line-height: 1;
+  border-radius: 9999px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+.x2img-btn:hover {
+  background-color: rgba(29, 155, 240, 0.12);
+  transform: scale(1.08);
+}
+.x2img-btn:active {
+  transform: scale(0.94);
+}
+
+/* 预览弹窗 */
+.x2img-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.x2img-box {
+  background: #fff;
+  border-radius: 18px;
+  max-width: 92vw;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+.x2img-preview {
+  max-width: 80vw;
+  max-height: 72vh;
+  object-fit: contain;
+  display: block;
+  background: #f1f5f9;
+}
+.x2img-bar {
+  display: flex;
+  gap: 10px;
+  padding: 14px 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+  border-top: 1px solid #eef2f6;
+}
+.x2img-action {
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 18px;
+  border-radius: 9999px;
+  border: 1px solid #cbd5e1;
+  background: #fff;
+  color: #0f172a;
+  cursor: pointer;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+.x2img-action:hover {
+  background: #f8fafc;
+}
+.x2img-action.primary {
+  background: #1d9bf0;
+  border-color: #1d9bf0;
+  color: #fff;
+}
+.x2img-action.primary:hover {
+  background: #1a8cd8;
+}
+.x2img-action.ghost {
+  border-color: transparent;
+  color: #64748b;
+}
